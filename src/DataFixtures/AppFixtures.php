@@ -13,17 +13,15 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
         {
-
-
+  
+                $category = new Category();
+                $category->setName("Smartphone");
+                $manager->persist($category);
 
                 $constructor = new Constructor();
                 $constructor->setName("Samsung")
                             ->setCreatedAt(new \DateTime());
                 $manager->persist($constructor);
-                
-                $category = new Category();
-                $category->setName("Smartphone");
-                $manager->persist($category);
 
                 for($i=1; $i <= 4; $i++) {                
                     $image = new Image();
@@ -50,10 +48,6 @@ class AppFixtures extends Fixture
                             ->setCreatedAt(new \DateTime());
                 $manager->persist($constructor);
 
-                $category = new Category();
-                $category->setName("Smartphone");
-                
-
                 for($i=5; $i <= 8; $i++) {                
                     $image = new Image();
                     $image->setName("Image$i.jpg");
@@ -77,10 +71,6 @@ class AppFixtures extends Fixture
                 $constructor->setName("Apple")
                             ->setCreatedAt(new \DateTime());
                 $manager->persist($constructor);
-
-                $category = new Category();
-                $category->setName("Smartphone");
-
 
                 for($i=9; $i <= 12; $i++) {                
                     $image = new Image();
