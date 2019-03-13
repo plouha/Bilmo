@@ -46,7 +46,7 @@ class Phone
     private $constructor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="phones")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="phones", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $categorie;
