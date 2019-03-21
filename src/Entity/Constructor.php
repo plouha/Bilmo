@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ConstructorRepository")
@@ -22,7 +23,8 @@ class Constructor
     private $name;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime_immutable")
+     * @JMS\Type("DateTimeImmutable<'d-m-Y H:i:s'>")
      */
     private $createdAt;
 

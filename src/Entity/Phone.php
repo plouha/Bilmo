@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PhoneRepository")
@@ -30,7 +30,8 @@ class Phone
 
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime_immutable")
+     * @JMS\Type("DateTimeImmutable<'d-m-Y H:i:s'>")
      */
     private $createdAt;
 
@@ -52,13 +53,8 @@ class Phone
     private $categorie;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $Marque;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Image", inversedBy="image", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity="App\Entity\Image")
+     * @var Image
      */
     private $image;
 
@@ -143,18 +139,6 @@ class Phone
     public function setCategorie(?Category $categorie): self
     {
         $this->categorie = $categorie;
-
-        return $this;
-    }
-
-    public function getMarque(): ?string
-    {
-        return $this->Marque;
-    }
-
-    public function setMarque(string $Marque): self
-    {
-        $this->Marque = $Marque;
 
         return $this;
     }
