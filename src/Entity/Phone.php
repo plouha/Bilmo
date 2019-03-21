@@ -5,9 +5,15 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PhoneRepository")
+ * @JMS\ExclusionPolicy("all")
+ * @Hateoas\Relation(
+ *      "image",
+ *      embedded= "expr(object.getImage())"
+ *  )
  */
 class Phone
 {
@@ -15,55 +21,59 @@ class Phone
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @JMS\Expose
+     * @JMS\Type("integer")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @JMS\Expose
+     * @JMS\Type("string")
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @JMS\Expose
+     * @JMS\Type("string")
      */
     private $content;
 
 
     /**
      * @ORM\Column(type="datetime_immutable")
-     * @JMS\Type("DateTimeImmutable<'d-m-Y H:i:s'>")
+     * @JMS\Expose
+     * @JMS\Type("DateTimeImmutable<'d/m/Y H:i:s'>")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="integer")
+     * @JMS\Expose
+     * @JMS\Type("integer")
      */
     private $price;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Constructor", inversedBy="phones")
      * @ORM\JoinColumn(nullable=false)
+     * @JMS\Expose
+     * @JMS\Type("string")
      */
     private $constructor;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="phones", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
+     * @JMS\Expose
      */
     private $categorie;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Image")
-     * @var Image
      */
     private $image;
-
-
-
-    public function __construct()
-    {
-        $this->images = new ArrayCollection();
-    }
 
 
     public function getId(): ?int
