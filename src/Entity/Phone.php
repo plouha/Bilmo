@@ -14,6 +14,21 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *      "image",
  *      embedded= "expr(object.getImage())"
  *  )
+ * @Hateoas\Relation(
+ *       "constructor",
+ *      embedded= "expr(object.getConstructor())"
+ *  )
+ * @Hateoas\Relation(
+ *      "category",
+ *      embedded= "expr(object.getCategorie())"
+ *  )
+ *  @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "phone_Show",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *      )
+ *  )
  */
 class Phone
 {
@@ -58,15 +73,11 @@ class Phone
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Constructor", inversedBy="phones")
      * @ORM\JoinColumn(nullable=false)
-     * @JMS\Expose
-     * @JMS\Type("string")
      */
     private $constructor;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="phones", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
-     * @JMS\Expose
      */
     private $categorie;
 
