@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Phone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Hateoas\Representation\PaginatedRepresentation;
+use Hateoas\Representation\CollectionRepresentation;
 
 /**
  * @method Phone|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,6 +21,19 @@ class PhoneRepository extends ServiceEntityRepository
         parent::__construct($registry, Phone::class);
     }
 
+    
+    public function phone_list()
+    {
+        $paginatedCollection = new PaginatedRepresentation(
+            new CollectionRepresentation(array(),
+            'phones', // route
+            array(), // route parameters
+            1,       // page number
+            4,      // limit
+            4       // total pages
+            )
+        );
+    }
     // /**
     //  * @return Phone[] Returns an array of Phone objects
     //  */
