@@ -11,7 +11,11 @@ use FOS\RestBundle\Request\ParamFetcher;
 use App\Repository\UserRepository;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Hateoas\Configuration\Route as HatoasRoute;
+use Hateoas\Representation\Factory\PagerfantaFactory;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Pagerfanta;
 
 class UserController extends AbstractFOSRestController {
 
@@ -31,20 +35,28 @@ class UserController extends AbstractFOSRestController {
     
     /**
      * @Route(path="users", name="user_Index", methods={"GET"})
+     * @QueryParam(name="page", default="1")
      * @View
      */
-
-    public function user_Index()
+    
+     public function list(UserRepository $userRepository, $paramFetcher)
     {
 
-        $user = $this->getDoctrine()->getRepository('App:User')->findAll();
-
-        return $user;
+        $pagerfantaFactory   = new PagerfantaFactory(); 
+            
+        $pager = $userRepository->getPaginatedUsers($paramFetcher->get("page", 1));
+        
+        $paginatedCollection = $pagerfantaFactory->createRepresentation(
+              $pager,
+              new HatoasRoute('user_Index', array())
+          );
+          
+        return $paginatedCollection;
 
     }
 
     /**
-     * @Route(path="/", name="user_Add", methods={"POST"})
+     * @Route(path="users/", name="user_Add", methods={"POST"})
      * @View
      * @ParamConverter("user", converter="fos_rest.request_body")
      * @param User $user

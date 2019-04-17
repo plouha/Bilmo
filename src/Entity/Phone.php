@@ -6,6 +6,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Hateoas\Configuration\Annotation as Hateoas;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PhoneRepository")
@@ -25,7 +26,7 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *  @Hateoas\Relation(
  *      "self",
  *      href = @Hateoas\Route(
- *          "phone_Show",
+ *          "phoneShow",
  *          parameters = { "id" = "expr(object.getId())" }
  *      )
  *  )

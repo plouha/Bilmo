@@ -5,8 +5,10 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Hateoas\Representation\PaginatedRepresentation;
 use Hateoas\Representation\CollectionRepresentation;
+use Pagerfanta\Pagerfanta;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,6 +23,19 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+
+    public function getPaginatedUsers(int $page): Pagerfanta
+    {
+      $queryBuilder = $this->createQueryBuilder("u")->orderBy("u.id","asc");
+      
+      $adapter = new DoctrineORMAdapter($queryBuilder);
+      
+      $pagerfanta = new Pagerfanta($adapter);
+      $pagerfanta->setCurrentPage($page);
+      $pagerfanta->setMaxPerPage(4);
+      
+      return $pagerfanta;
+    }
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

@@ -3,27 +3,30 @@
 namespace App\Controller;
 
 use App\Entity\Phone;
+use App\Repository\PhoneRepository;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use Doctrine\ORM\EntityManagerInterface;
-use FOS\RestBundle\Request\ParamFetcher;
-use App\Repository\PhoneRepository;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-use Hateoas\Representation\PaginatedRepresentation;
-use Hateoas\Representation\CollectionRepresentation;
-
+use FOS\RestBundle\Request\ParamFetcher;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Hateoas\Configuration\Route as HatoasRoute;
+use Hateoas\Representation\Factory\PagerfantaFactory;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Pagerfanta;
 
 class PhoneController extends AbstractFOSRestController {
 
     /**
-     * @Route(path="phones/{id}", name="phone_Show", methods={"GET"})
+     * @Route(path="phones/{id}", name="phoneShow", methods={"GET"})
      * @View
      * @param Phone $phone
      * @return phone
      */
 
-    public function phone_Show(Phone $phone): Phone
+    public function phoneShow(Phone $phone): Phone
     {
 
         return $phone;
@@ -36,18 +39,20 @@ class PhoneController extends AbstractFOSRestController {
      * @View
      */
 
-    public function list(ParamFetcher $paramFetcher, PhoneRepository $phoneRepository)
+    public function list(PhoneRepository $phoneRepository, $paramFetcher)
     {
-        $paginatedPhones = $phoneRepository
-            ->getPaginatedPhones($paramFetcher->get("page"));       
+
+        $pagerfantaFactory   = new PagerfantaFactory(); 
+            
+        $pager = $phoneRepository->getPaginatedPhones($paramFetcher->get("page", 1));
         
-        $pagerfantaFactory = new PagerfantaFactory();
-        /*$paginatedPhones = $this->getDoctrine()->getRepository('App:Phone')->findAll();*/        
-        return $pagerfantaFactory->createReprésentation(
-            $paginatedPhones,
-            new \Hatoas\Configuration\Route('phone_list', [])
-        );
+        $paginatedCollection = $pagerfantaFactory->createRepresentation(
+              $pager,
+              new HatoasRoute('phone_list', array())
+          );
+          
+        return $paginatedCollection;
 
     }
+}        
 
-}

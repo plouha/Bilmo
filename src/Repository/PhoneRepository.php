@@ -4,9 +4,11 @@ namespace App\Repository;
 
 use App\Entity\Phone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Hateoas\Representation\PaginatedRepresentation;
-use Hateoas\Representation\CollectionRepresentation;
+use Pagerfanta\Pagerfanta;
+
 
 /**
  * @method Phone|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,19 +23,21 @@ class PhoneRepository extends ServiceEntityRepository
         parent::__construct($registry, Phone::class);
     }
 
-    
-    public function phone_list()
+
+    public function getPaginatedPhones(int $page): Pagerfanta
     {
-        $paginatedCollection = new PaginatedRepresentation(
-            new CollectionRepresentation(array(),
-            'phones', // route
-            array(), // route parameters
-            1,       // page number
-            4,      // limit
-            4       // total pages
-            )
-        );
+      $queryBuilder = $this->createQueryBuilder("p")->orderBy("p.id","asc");
+      
+      $adapter = new DoctrineORMAdapter($queryBuilder);
+      
+      $pagerfanta = new Pagerfanta($adapter);
+      $pagerfanta->setCurrentPage($page);
+      $pagerfanta->setMaxPerPage(10);
+      
+      return $pagerfanta;
     }
+}
+
     // /**
     //  * @return Phone[] Returns an array of Phone objects
     //  */
@@ -61,5 +65,5 @@ class PhoneRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-    */
-}
+ }   */
+
