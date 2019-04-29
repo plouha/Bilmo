@@ -5,10 +5,15 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Hateoas\Configuration\Annotation as Hateoas;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- *
+ * @UniqueEntity(
+ *      fields= {"email"}
+ *      )
  * @JMS\ExclusionPolicy("all")
  * @Hateoas\Relation(
  *      "self",
@@ -18,7 +23,7 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *      )
  *  )
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -50,6 +55,12 @@ class User
      */
     private $password;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Client", inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $client;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -67,12 +78,12 @@ class User
         return $this;
     }
 
-    public function getName(): ?string
+    public function getUsername(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setUsername(string $name): self
     {
         $this->name = $name;
 
@@ -90,4 +101,25 @@ class User
 
         return $this;
     }
+
+    public function eraseCredentials() {}
+
+    public function getSalt() {}
+        
+    public function getRoles(): ?array 
+        {
+            return $this->roles;
+        }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
+
+        return $this;
+    }    
 }

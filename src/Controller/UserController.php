@@ -16,6 +16,7 @@ use Hateoas\Configuration\Route as HatoasRoute;
 use Hateoas\Representation\Factory\PagerfantaFactory;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractFOSRestController {
 
@@ -64,8 +65,12 @@ class UserController extends AbstractFOSRestController {
      * @return user
      */
 
-    public function user_Add(User $user, EntityManagerInterface $entityManager): User
+    public function user_Add(User $user, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $encoder): User
     {
+        $user = new User();
+
+        $hash = $encoder->encodePassword($user, $user->getPassword());
+        $user->setPassword($hash);
         $entityManager->persist($user);
         $entityManager->flush();
 

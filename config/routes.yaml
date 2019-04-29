@@ -2,3 +2,5 @@ index:
     path: /phones
     controller: App\Controller\PhoneController
 
+api_login_check:
+    path: /api/login_check

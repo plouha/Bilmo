@@ -8,6 +8,8 @@ use App\Entity\Image;
 use App\Entity\Constructor;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class AppFixtures extends Fixture
 {
@@ -20,7 +22,7 @@ class AppFixtures extends Fixture
 
                 $constructor = new Constructor();
                 $constructor->setName("Samsung")
-                            ->setCreatedAt(new \DateTime());
+                            ->setCreatedAt(new \DateTimeImmutable());
                 $manager->persist($constructor);
 
                 for($i=1; $i <= 4; $i++) {                
@@ -30,13 +32,12 @@ class AppFixtures extends Fixture
                     
                     $phone = new Phone();
 
-                    $phone  -> setMarque("Samesung")
-                            -> setTitle("Smartphone " .$i)
+                    $phone  -> setTitle("Smartphone " .$i)
                             -> setContent("Description du téléphone " .$i)
                             -> setConstructor($constructor)
                             -> setCategorie($category)
                             -> setImage($image) 
-                            -> setCreatedAt(new \DateTime())
+                            -> setCreatedAt(new \DateTimeImmutable())
                             -> setPrice("200"); 
         
                     $manager->persist($phone);
@@ -45,7 +46,7 @@ class AppFixtures extends Fixture
                     
                 $constructor = new Constructor();
                 $constructor->setName("Nokia")
-                            ->setCreatedAt(new \DateTime());
+                            ->setCreatedAt(new \DateTimeImmutable());
                 $manager->persist($constructor);
 
                 for($i=5; $i <= 8; $i++) {                
@@ -55,13 +56,12 @@ class AppFixtures extends Fixture
                     
                     $phone = new Phone();
 
-                    $phone  -> setMarque("Nokia")
-                            -> setTitle("Smartphone " .$i)
+                    $phone  -> setTitle("Smartphone " .$i)
                             -> setContent("Description du téléphone " .$i)
                             -> setConstructor($constructor)
                             -> setCategorie($category)
                             -> setImage($image)
-                            -> setCreatedAt(new \DateTime())
+                            -> setCreatedAt(new \DateTimeImmutable())
                             -> setPrice("250"); 
         
                     $manager->persist($phone);
@@ -69,7 +69,7 @@ class AppFixtures extends Fixture
                 
                 $constructor = new Constructor();
                 $constructor->setName("Apple")
-                            ->setCreatedAt(new \DateTime());
+                            ->setCreatedAt(new \DateTimeImmutable());
                 $manager->persist($constructor);
 
                 for($i=9; $i <= 12; $i++) {                
@@ -79,16 +79,15 @@ class AppFixtures extends Fixture
                     
                     $phone = new Phone();
 
-                    $phone   -> setMarque("Apple")
-                         -> setTitle("Smartphone " .$i)
-                         -> setContent("Description du téléphone " .$i)
-                         -> setConstructor($constructor)
-                         -> setCategorie($category)
-                         -> setImage($image)
-                         -> setCreatedAt(new \DateTime())
-                         -> setPrice("300"); 
+                    $phone  -> setTitle("Smartphone " .$i)
+                            -> setContent("Description du téléphone " .$i)
+                            -> setConstructor($constructor)
+                            -> setCategorie($category)
+                            -> setImage($image)
+                            -> setCreatedAt(new \DateTimeImmutable())
+                            -> setPrice("300"); 
         
-                $manager->persist($phone);
+                    $manager->persist($phone);
                 }
 
             $manager->flush();
