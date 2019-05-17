@@ -24,15 +24,15 @@ class UserRepository extends ServiceEntityRepository
     }
 
 
-    public function getPaginatedUsers(int $page): Pagerfanta
+    public function getPaginatedUsers(int $page, $client): Pagerfanta
     {
-      $queryBuilder = $this->createQueryBuilder("u")->orderBy("u.id","asc");
+      $queryBuilder = $this->createQueryBuilder("u")->orderBy("u.id","asc")->where('u.client = :client')->setParameter('client', $client);
       
       $adapter = new DoctrineORMAdapter($queryBuilder);
       
       $pagerfanta = new Pagerfanta($adapter);
       $pagerfanta->setCurrentPage($page);
-      $pagerfanta->setMaxPerPage(4);
+      $pagerfanta->setMaxPerPage(10);
       
       return $pagerfanta;
     }

@@ -5,12 +5,15 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
+use Hateoas\Configuration\Annotation as Hateoas;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
+ * @JMS\ExclusionPolicy("all") 
  */
 class Client implements UserInterface
 {
@@ -18,16 +21,22 @@ class Client implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @JMS\Expose
+     * @JMS\Type("integer")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @JMS\Expose
+     * @JMS\Type("string")
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @JMS\Expose
+     * @JMS\Type("string")
      */
     private $name;
 

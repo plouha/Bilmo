@@ -14,13 +14,17 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Hateoas\Configuration\Route as HatoasRoute;
 use Hateoas\Representation\Factory\PagerfantaFactory;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 
+/**
+ * @Security("is_granted('ROLE_USER')")
+ */
 class PhoneController extends AbstractFOSRestController {
 
     /**
-     * @Route(path="phones/{id}", name="phoneShow", methods={"GET"})
+     * @Route(path="/phones/{id}", name="phoneShow", methods={"GET"})
      * @View
      * @param Phone $phone
      * @return phone

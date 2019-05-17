@@ -22,6 +22,13 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  *          parameters = { "id" = "expr(object.getId())" }
  *      )
  *  )
+ * @Hateoas\Relation(
+ *      "delete",
+ *      href = @Hateoas\Route(
+ *          "user_Delete",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *      )
+ *  )
  */
 class User implements UserInterface
 {
