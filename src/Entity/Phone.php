@@ -78,7 +78,7 @@ class Phone
     private $constructor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="phones", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="phones")
      */
     private $categorie;
 

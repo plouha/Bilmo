@@ -38,7 +38,7 @@ class PhoneController extends AbstractFOSRestController {
     }
 
     /**
-     * @Route(path="/phones", name="phone_list", methods={"GET"})
+     * @Route(path="/phones", name="phonelist", methods={"GET"})
      * @QueryParam(name="page", default="1")
      * @View
      */
@@ -52,7 +52,7 @@ class PhoneController extends AbstractFOSRestController {
         
         $paginatedCollection = $pagerfantaFactory->createRepresentation(
               $pager,
-              new HatoasRoute('phone_list', array())
+              new HatoasRoute('phonelist', array())
           );
           
         return $paginatedCollection;

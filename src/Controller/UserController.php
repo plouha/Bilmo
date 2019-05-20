@@ -29,7 +29,7 @@ class UserController extends AbstractFOSRestController {
     /**
      * @Route(path="/users/{id}", name="userShow", methods={"GET"})
      * @View
-     * @IsGranted("ROLE_USER", subject="user")
+     * @IsGranted("view", subject="user")
      * @param User $user
      * @return user
      */
@@ -46,7 +46,6 @@ class UserController extends AbstractFOSRestController {
      * @QueryParam(name="page", default="1")
      * @ParamConverter("user", converter="fos_rest.request_body")
      * @View
-     * @IsGranted("ROLE_USER", subject="user")
      */
     
      public function list(User $user, UserRepository $userRepository, $paramFetcher)
@@ -58,7 +57,7 @@ class UserController extends AbstractFOSRestController {
             
         $paginatedCollection = $pagerfantaFactory->createRepresentation(
               $pager,
-              new HatoasRoute('user_Index', array())
+              new HatoasRoute('userIndex', array())
           );
           
         return $paginatedCollection;
@@ -89,7 +88,7 @@ class UserController extends AbstractFOSRestController {
     /**
      * @Route(path="/users/{id}", name="userDelete", methods={"DELETE"})
      * @View
-     * @IsGranted("ROLE_USER", subject="user")
+     * @IsGranted("delete", subject="user")
      * @param User $user
      * @param EntityManagerInterface $entityManager
      */

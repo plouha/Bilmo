@@ -18,14 +18,14 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  * @Hateoas\Relation(
  *      "self",
  *      href = @Hateoas\Route(
- *          "user_Show",
+ *          "userShow",
  *          parameters = { "id" = "expr(object.getId())" }
  *      )
  *  )
  * @Hateoas\Relation(
  *      "delete",
  *      href = @Hateoas\Route(
- *          "user_Delete",
+ *          "userDelete",
  *          parameters = { "id" = "expr(object.getId())" }
  *      )
  *  )
