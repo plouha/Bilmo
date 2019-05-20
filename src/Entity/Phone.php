@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      embedded= "expr(object.getImage())"
  *  )
  * @Hateoas\Relation(
- *       "constructor",
+ *      "constructor",
  *      embedded= "expr(object.getConstructor())"
  *  )
  * @Hateoas\Relation(
@@ -78,12 +78,12 @@ class Phone
     private $constructor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="phones", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="phones")
      */
     private $categorie;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Image")
+     * @ORM\OneToOne(targetEntity="App\Entity\Image", mappedBy="phones")
      */
     private $image;
 
