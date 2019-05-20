@@ -27,14 +27,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class UserController extends AbstractFOSRestController {
 
     /**
-     * @Route(path="/users/{id}", name="user_Show", methods={"GET"})
+     * @Route(path="/users/{id}", name="userShow", methods={"GET"})
      * @View
      * @IsGranted("ROLE_USER", subject="user")
      * @param User $user
      * @return user
      */
 
-    public function user_Show(User $user): User
+    public function userShow(User $user): User
     {
 
         return $user;
@@ -42,7 +42,7 @@ class UserController extends AbstractFOSRestController {
     }
     
     /**
-     * @Route(path="/users", name="user_Index", methods={"GET"})
+     * @Route(path="/users", name="userIndex", methods={"GET"})
      * @QueryParam(name="page", default="1")
      * @ParamConverter("user", converter="fos_rest.request_body")
      * @View
@@ -66,7 +66,7 @@ class UserController extends AbstractFOSRestController {
     }
 
     /**
-     * @Route(path="/users", name="user_Add", methods={"POST"})
+     * @Route(path="/users", name="userAdd", methods={"POST"})
      * @View
      * @ParamConverter("user", converter="fos_rest.request_body")
      * @param User $user
@@ -74,7 +74,7 @@ class UserController extends AbstractFOSRestController {
      * @return user
      */
 
-    public function user_Add(User $user, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $encoder): User
+    public function userAdd(User $user, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $encoder): User
     {
         $user->setClient($this->getUser());
         $hash = $encoder->encodePassword($user, $user->getPassword());
@@ -87,14 +87,14 @@ class UserController extends AbstractFOSRestController {
     }
       
     /**
-     * @Route(path="/users/{id}", name="user_Delete", methods={"DELETE"})
+     * @Route(path="/users/{id}", name="userDelete", methods={"DELETE"})
      * @View
      * @IsGranted("ROLE_USER", subject="user")
      * @param User $user
      * @param EntityManagerInterface $entityManager
      */
 
-    public function user_Delete(User $user, EntityManagerInterface $entityManager)
+    public function userDelete(User $user, EntityManagerInterface $entityManager)
     {        
 
         $entityManager->remove($user);

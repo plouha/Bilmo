@@ -1,4 +1,6 @@
 {
+    "name": "Bilmo",
+    "description": "API REST Bilmo",
     "type": "project",
     "license": "proprietary",
     "require": {
