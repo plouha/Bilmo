@@ -3,26 +3,33 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Client;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Request\ParamFetcher;
 use App\Repository\UserRepository;
+use App\Repository\ClientRepository;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Hateoas\Configuration\Route as HatoasRoute;
 use Hateoas\Representation\Factory\PagerfantaFactory;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 
 class UserController extends AbstractFOSRestController {
 
     /**
-     * @Route(path="users/{id}", name="user_Show", methods={"GET"})
+     * @Route(path="/users/{id}", name="user_Show", methods={"GET"})
      * @View
+     * @IsGranted("ROLE_USER", subject="user")
      * @param User $user
      * @return user
      */
@@ -35,18 +42,20 @@ class UserController extends AbstractFOSRestController {
     }
     
     /**
-     * @Route(path="users", name="user_Index", methods={"GET"})
+     * @Route(path="/users", name="user_Index", methods={"GET"})
      * @QueryParam(name="page", default="1")
+     * @ParamConverter("user", converter="fos_rest.request_body")
      * @View
+     * @IsGranted("ROLE_USER", subject="user")
      */
     
-     public function list(UserRepository $userRepository, $paramFetcher)
-    {
+     public function list(User $user, UserRepository $userRepository, $paramFetcher)
+    { 
 
-        $pagerfantaFactory   = new PagerfantaFactory(); 
+        $pagerfantaFactory   = new PagerfantaFactory();
+         
+        $pager = $userRepository->getPaginatedUsers($paramFetcher->get("page", 1), $this->getUser()); 
             
-        $pager = $userRepository->getPaginatedUsers($paramFetcher->get("page", 1));
-        
         $paginatedCollection = $pagerfantaFactory->createRepresentation(
               $pager,
               new HatoasRoute('user_Index', array())
@@ -57,7 +66,7 @@ class UserController extends AbstractFOSRestController {
     }
 
     /**
-     * @Route(path="users/", name="user_Add", methods={"POST"})
+     * @Route(path="/users", name="user_Add", methods={"POST"})
      * @View
      * @ParamConverter("user", converter="fos_rest.request_body")
      * @param User $user
@@ -67,8 +76,7 @@ class UserController extends AbstractFOSRestController {
 
     public function user_Add(User $user, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $encoder): User
     {
-        $user = new User();
-
+        $user->setClient($this->getUser());
         $hash = $encoder->encodePassword($user, $user->getPassword());
         $user->setPassword($hash);
         $entityManager->persist($user);
@@ -79,8 +87,9 @@ class UserController extends AbstractFOSRestController {
     }
       
     /**
-     * @Route(path="users/{id}", name="user_Delete", methods={"DELETE"})
+     * @Route(path="/users/{id}", name="user_Delete", methods={"DELETE"})
      * @View
+     * @IsGranted("ROLE_USER", subject="user")
      * @param User $user
      * @param EntityManagerInterface $entityManager
      */
