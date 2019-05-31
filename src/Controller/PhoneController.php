@@ -17,13 +17,35 @@ use Hateoas\Representation\Factory\PagerfantaFactory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
 
-/**
- * @Security("is_granted('ROLE_USER')")
- */
+
 class PhoneController extends AbstractFOSRestController {
 
     /**
+     * @SWG\Get(
+     *     description="Show one phone.",
+     *     tags = {"Phones"},
+     *     @SWG\Response(
+     *          response=200,
+     *          @Model(type=Phone::class),
+     *          description="successful operation",
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="Bad Request: Method Not Allowed",
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="Unauthorized: Expired JWT Token/JWT Token not found",
+     *     ),
+     *     @SWG\Response(
+     *         response="404",
+     *         description="Phone object not found: Invalid ID supplied/Invalid Route",
+     *     )
+     * )
+     * 
      * @Route(path="/phones/{id}", name="phoneShow", methods={"GET"})
      * @View
      * @param Phone $phone
@@ -38,6 +60,28 @@ class PhoneController extends AbstractFOSRestController {
     }
 
     /**
+     * @SWG\Get(
+     *     description="Get the list of phones.",
+     *     tags = {"Phones"},
+     *     @SWG\Response(
+     *          response=200,
+     *          @Model(type=Phone::class),
+     *          description="successful operation",
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="Bad Request: Method Not Allowed",
+     *     ),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="Unauthorized: Expired JWT Token/JWT Token not found",
+     *     ),
+     *     @SWG\Response(
+     *         response="404",
+     *         description="Not Found: Invalid Route",
+     *     )
+     * )
+     * 
      * @Route(path="/phones", name="phonelist", methods={"GET"})
      * @QueryParam(name="page", default="1")
      * @View
